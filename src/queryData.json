@@ -1,0 +1,13 @@
+[
+    {
+        "query": "Can aws perform benchmark on my services?",
+        "sections": [
+            [
+                {
+                    "section_number": "1.8",
+                    "explaination_in_English_language": "Yes, AWS allows customers to perform benchmarks on AWS services according to the service terms. However, customers must disclose the methodology to AWS and must acknowledge that AWS can benchmark the customer's products or services in return."
+                }
+            ]
+        ]
+    }
+]
