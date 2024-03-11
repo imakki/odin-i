@@ -113,7 +113,7 @@ function App() {
   const highlightedSections =
     mutateQuery.data?.query_answers.flatMap((query) => {
       return query.sections.map((section) => {
-        return section[0].section_number;
+        return section.section_number;
       });
     }) ?? [];
 
@@ -178,17 +178,17 @@ function App() {
                     return (
                       <Box
                         onClick={() => {
-                          scrollToElementById(section[0].section_number);
+                          scrollToElementById(section.section_number);
                         }}
-                        key={`${section[0].section_number}`}
+                        key={`${section.section_number}`}
                         style={{
                           cursor: "pointer",
                           textDecoration: "underline",
                         }}
                       >
-                        <Typography>{section[0].section_number}</Typography>
+                        <Typography>{section.section_number}</Typography>
                         <Typography>
-                          {section[0].explaination_in_English_language}
+                          {section.explaination_in_English_language}
                         </Typography>
                       </Box>
                     );
