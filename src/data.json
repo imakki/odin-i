@@ -1,0 +1,115 @@
+{
+    "summaries": [
+        [
+            {
+                "section_number": null,
+                "summary": null,
+                "section_text": "AWS Service Terms\\nLast Updated: March 5, 2024\\n1. Universal Service Terms (Applicable to All Services)\\n\\nThe Service Terms below govern your use of the Services. Capitalized terms used in these Service Terms but not defined below are defined in the AWS Customer Agreement or other agreement with us governing your use of the Services (the “Agreement”). For purposes of these Service Terms, “Your Content” includes any “Company Content” and any “Customer Content,” and “AWS Content” includes “Amazon Properties.”\\n\\n",
+                "importance_score": null
+            },
+            {
+                "section_number": "1.1",
+                "summary": "You may not transfer outside the Services any software (including related documentation) you obtain from us or third party licensors in connection with the Services without specific authorization.",
+                "section_text": "1.1. You may not transfer outside the Services any software (including related documentation) you obtain from us or third party licensors in connection with the Services without specific authorization to do so.\\n\\n",
+                "importance_score": null
+            },
+            {
+                "section_number": "1.2",
+                "summary": "You must comply with the technical documentation applicable to the Services.",
+                "section_text": "1.2. You must comply with current technical documentation applicable to the Services (including applicable user, admin, and developer guides) posted on the AWS Site at https://docs.aws.amazon.com/index.html (and any successor or related locations designated by us). \\n\\n",
+                "importance_score": null
+            },
+            {
+                "section_number": "1.3",
+                "summary": "You will provide information or other materials related to Your Content as requested to verify your compliance with the Agreement.",
+                "section_text": "1.3. You will provide information or other materials related to Your Content (including copies of any client-side applications) as reasonably requested by us to verify your compliance with the Agreement. You will reasonably cooperate with us to identify the source of any problem with the Services that we reasonably believe may be attributable to Your Content or any end user materials that you control.\\n\\n",
+                "importance_score": null
+            },
+            {
+                "section_number": "1.4",
+                "summary": "You are responsible for maintaining licenses and adhering to license terms of any software you run. AWS may notify you if Your Content violates the law or infringes the rights of any third party.",
+                "section_text": "1.4. In connection with your use of the Services, you are responsible for maintaining licenses and adhering to the license terms of any software you run. If we reasonably believe any of Your Content violates the law, infringes or misappropriates the rights of any third party, or otherwise violates a material term of the Agreement (including the Service Terms, or the Acceptable Use Policy) (“Prohibited Content”), we will notify you of the Prohibited Content and may request that such content be removed from the Services or access to it be disabled. If you do not remove or disable access to the Prohibited Content within 2 business days of our notice, we may remove or disable access to the Prohibited Content or suspend the Services to the extent we are not able to remove or disable access to the Prohibited Content. Notwithstanding the foregoing, we may remove or disable access to any Prohibited Content without prior notice in connection with illegal content, where the content may disrupt or threaten the Services or in accordance with applicable law or any judicial, regulatory or other governmental order or request. In the event that we remove Your Content without prior notice, we will provide prompt notice to you unless prohibited by law. We terminate the accounts of repeat infringers in appropriate circumstances.\\n\\n",
+                "importance_score": null
+            },
+            {
+                "section_number": "1.5",
+                "summary": "You must provide accurate and complete information to AWS.",
+                "section_text": "1.5. You will ensure that all information you provide to us via the AWS Site (e.g., information provided in connection with your registration for the Services, requests for increased usage limits) is accurate, complete, and not misleading.\\n\\n",
+                "importance_score": null
+            },
+            {
+                "section_number": "1.6",
+                "summary": "AWS may apply upgrades, patches, bug fixes, or other maintenance to the Services.",
+                "section_text": "1.6. From time to time, we may apply upgrades, patches, bug fixes, or other maintenance to the Services and AWS Content (“Maintenance”). We agree to use reasonable efforts to provide you with prior notice of any scheduled Maintenance (except for emergency Maintenance), and you agree to use reasonable efforts to comply with any Maintenance requirements that we notify you about.\\n\\n",
+                "importance_score": null
+            },
+            {
+                "section_number": "1.7",
+                "summary": "You agree not to disclose AWS Confidential Information, except as required by law.",
+                "section_text": "1.7. If your Agreement does not include a provision on AWS Confidential Information, and you and AWS do not have an effective non-disclosure agreement in place, then you agree that you will not disclose AWS Confidential Information (as defined in the AWS Customer Agreement), except as required by law.\\n\\n",
+                "importance_score": null
+            },
+            {
+                "section_number": "1.8",
+                "summary": "You may perform benchmarks or tests of the Services. AWS may perform and disclose the results of benchmarks of your products or services.",
+                "section_text": "1.8. You may perform benchmarks or comparative tests or evaluations (each, a “Benchmark”) of the Services. If you perform or disclose, or direct or permit any third party to perform or disclose, any Benchmark of any of the Services, you (i) will include in any disclosure, and will disclose to us, all information necessary to replicate such Benchmark, and (ii) agree that we may perform and disclose the results of Benchmarks of your products or services, irrespective of any restrictions on Benchmarks in the terms governing your products or services.\\n\\n",
+                "importance_score": null
+            },
+            {
+                "section_number": "1.9",
+                "summary": "Each AWS Contracting Party has obligations only for the AWS account it is responsible for.",
+                "section_text": "1.9. Only the applicable AWS Contracting Party (as defined in the AWS Customer Agreement) will have obligations with respect to each AWS account, and no other AWS Contracting Party has any obligation with respect to such account. The AWS Contracting Party for an account may change as described in the Agreement. Invoices for each account will reflect the AWS Contracting Party that is responsible for that account during the applicable billing period.\\n\\nIf, as of the time of a change of the AWS Contracting Party responsible for your account, you have made an up-front payment for any Services under such account, then the AWS Contracting Party you paid such up-front payment to may remain the AWS Contracting Party for the applicable account only with respect to the Services related to such up-front payment.\\n\\n",
+                "importance_score": null
+            },
+            {
+                "section_number": "1.10",
+                "summary": "When using a Service, you may also be subject to the terms and fees of an Associated Service.",
+                "section_text": "1.10. When you use a Service, you may be able to use or be required to use one or more other Services (each, an “Associated Service”), and when you use an Associated Service, you are subject to the terms and fees that apply to that Associated Service.\\n\\n",
+                "importance_score": null
+            },
+            {
+                "section_number": "1.11",
+                "summary": "If you process personal data, you are responsible for providing privacy notices and obtaining necessary consents.",
+                "section_text": "1.11. If you process the personal data of End Users or other identifiable individuals in your use of a Service, you are responsible for providing legally adequate privacy notices and obtaining necessary consents for the processing of such data. You represent to us that you have provided all necessary privacy notices and obtained all necessary consents. You are responsible for processing such data in accordance with applicable law.\\n\\n",
+                "importance_score": null
+            },
+            {
+                "section_number": "1.12",
+                "summary": "If a Service is unavailable and you have been charged, you may request a Service credit.",
+                "section_text": "1.12. If you have been charged for a Service for a period when that Service was unavailable (as defined in the applicable Service Level Agreement for each Service), you may request a Service credit equal to any charged amounts for such period.\\n\\n",
+                "importance_score": null
+            },
+            {
+                "section_number": "1.13",
+                "summary": "If subject to the French Politique générale de sécurité des systems d’information de santé, your use of the Services must comply with the PGSSI-S.",
+                "section_text": "1.13. If you are a customer that is subject to the French Politique générale de sécurité des systems d’information de santé (PGSSI-S), you agree that your use of the Services complies with the PGSSI-S.\n",
+                "importance_score": null
+            },
+            {
+                "section_number": "1.14",
+                "summary": "The Service Terms incorporate various addendums and clauses related to data protection.",
+                "section_text": "1.14. Data Protection.\\n\\n1.14.1 These Service Terms incorporate the AWS Data Processing Addendum (“DPA”), when you use AWS Services to process Customer Data (as defined in the DPA). \\n\\n1.14.2 These Service Terms incorporate the AWS Supplementary Addendum to the DPA, when you use AWS Services to process Customer Data (as defined in the DPA).\\n\\n1.14.3 These Service Terms incorporate the Standard Contractual Clauses between controllers and processors (“Controller-to-Processor Clauses”) and the Standard Contractual Clauses between processors (“Processor-to-Processor Clauses”) approved by the European Commission Implementing Decision (EU) 2021/914 of 4 June 2021 (the “SCCs”). The SCCs will only apply when: (i) the GDPR applies to your use of the AWS Services to process Customer Data; and (ii) Customer Data is transferred either directly or via onward transfer, to a country outside of the European Economic Area not recognised by the European Commission as providing an adequate level of protection for personal data subject to GDPR (together a “Data Transfer”). When you are a controller (as defined in the GDPR), the Controller-to-Processor Clauses will apply to a Data Transfer. When you are a processor (as defined in the GDPR), the Processor-to-Processor Clauses will apply to a Data Transfer.\\n\\n1.14.4 These Service Terms incorporate the AWS UK GDPR Addendum to the DPA, when the UK GDPR applies to your use of the AWS Services to process UK Customer Data (as defined in the AWS UK GDPR Addendum), and the AWS Swiss Addendum to the DPA, when the FDPA applies to your use of the AWS Services to process Swiss Customer Data (as defined in the AWS Swiss Addendum).\\n\\n1.14.5 These Service Terms incorporate the AWS CCPA Terms (“CCPA Terms”), when the CCPA applies to your use of the AWS Services to process Personal Information (as defined in the CCPA Terms).\\n\\n",
+                "importance_score": null
+            },
+            {
+                "section_number": "1.15",
+                "summary": "After closing your AWS account, Your Content will be deleted according to the technical documentation.",
+                "section_text": "1.15. Following closure of your AWS account, we will delete Your Content in accordance with the technical documentation applicable to the Services.\\n\\n",
+                "importance_score": null
+            },
+            {
+                "section_number": "1.16",
+                "summary": "Promotional Credits are subject to the AWS Promotional Credit Terms & Conditions.",
+                "section_text": "1.16. Your receipt and use of any Promotional Credits is subject to the AWS Promotional Credit Terms & Conditions.\\n\\n",
+                "importance_score": null
+            },
+            {
+                "section_number": "1.17",
+                "summary": "AWS provides a Currency Service for payment in certain currencies.",
+                "section_text": "1.17. Payment Currency\\n\\n1.17.1 AWS provides a Service that enables payment in certain currencies (“Payment Currency”) other than United States dollars when you purchase certain Services from AWS (the “Currency Service”). When you purchase Services in certain countries outside of the United States, we may require you, because of currency controls or other factors, to use the Currency Service. When using the Currency Service you are not tendering payment in one currency and receiving from us another currency.\\n\\n1.17.2 When you use the Currency Service, Service fees and charges will automatically be invoiced in the Payment Currency. You must pay invoices in the currency specified on each invoice, but, for credit card or debit card purchases, you may only make payments in currencies supported by the issuer of your card. If the issuer of your credit card or debit card does not support the required Payment Currency, you must use a different payment method that does support paying in the Payment Currency.\\n\\n1.17.3 Our fees and charges for your use of the Currency Service, if any, are included in the exchange rate applied to your invoice (the “Applicable Exchange Rate”). Third-parties, such as your bank, credit card issuer, debit card issuer, or card network, may charge you additional fees. The Applicable Exchange Rate is determined at the time your invoice is generated and, for invoices covering usage of Services over a period of time, will apply to all usage and Service charges listed on that invoice.\\n\\n1.17.4 All refunds processed against an invoice will be provided in the currency in which the invoice was generated and reflected as a credit memo or a payment in your Payment Currency.",
+                "importance_score": null
+            }
+        ]
+    ],
+    "cost": 0.38072
+}
