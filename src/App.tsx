@@ -11,6 +11,7 @@ import {
 import { useMutation } from "@tanstack/react-query";
 import summariesList from "./data.json";
 import queryData from "./queryData.json";
+import UserInput from "./UserInput";
 
 const summarisePost = async (text) => {
   const response = await fetch("http://127.0.0.1:8000/summarize", {
@@ -143,26 +144,12 @@ function App() {
           justifyContent: "space-between",
         }}
       >
-        <div>
-          <TextField
-            multiline
-            fullWidth
-            rows={10}
-            value={text}
-            onChange={handleChange}
-            variant="outlined"
-            placeholder="Enter text (max 10 lines)"
-            // This style ensures the TextField visually indicates it can contain multiple lines.
-            style={{ marginBottom: "20px" }}
-          />
-          <Button
-            variant="contained"
-            onClick={handleSummarize}
-            disabled={isPending}
-          >
-            {isPending ? "doing stuff..." : "Summarize"}
-          </Button>
-        </div>
+        <UserInput
+          text={text}
+          handleChange={handleChange}
+          handleSummarize={handleSummarize}
+          isPending={isPending}
+        />
         {mutateQuery.isPending ? (
           <CircularProgress size={"20"} />
         ) : (
@@ -205,7 +192,6 @@ function App() {
             alignItems: "center",
             padding: "8px",
             borderRadius: "4px",
-            border: "1px solid #ccc", // Style the border as needed
           }}
         >
           <TextField
