@@ -3,8 +3,7 @@ import { Box, Button, IconButton, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { Delete } from "@mui/icons-material";
 
-const FileUploadButton = () => {
-  const [file, setFile] = useState(null);
+const FileUploadButton = ({ file, setFile }) => {
   const [dragOver, setDragOver] = useState(false);
 
   const handleFileChange = (event) => {

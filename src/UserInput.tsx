@@ -25,9 +25,40 @@ const DividerWithText = () => (
     </Box>
   </Box>
 );
+const BASE_URL = "https://94f2-171-76-83-95.ngrok-free.app";
 
-const UserInput = ({ text, handleChange, handleSummarize, isPending }) => {
+const UserInput = ({ handleSummarize, isPending, file, setFile }) => {
   const [open, setOpen] = useState(false);
+  const [text, setText] = useState("");
+
+  const handleChange = (event) => {
+    const inputLines = event.target.value.split("\n");
+    if (inputLines.length <= 10) {
+      setText(event.target.value);
+    } else {
+      // If more than 10 lines, limit the text to the first 10 lines.
+      setText(inputLines.slice(0, 10).join("\n"));
+    }
+  };
+
+  const summarisePost = async () => {
+    const formdata = new FormData();
+    console.log(file);
+    formdata.append("file", file);
+    const response = await fetch(`${BASE_URL}/document`, {
+      method: "POST",
+      body:
+        formdata ??
+        JSON.stringify({
+          text: text,
+        }),
+    });
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    return response.json();
+  };
+
   return (
     <div
       style={{
@@ -37,7 +68,7 @@ const UserInput = ({ text, handleChange, handleSummarize, isPending }) => {
         justifyContent: "end",
       }}
     >
-      <FileUploadButton />
+      <FileUploadButton file={file} setFile={setFile} />
       <DividerWithText />
       <Button
         variant="contained"
@@ -67,9 +98,14 @@ const UserInput = ({ text, handleChange, handleSummarize, isPending }) => {
             </div>
           }
           cancelAction={() => {}}
-          submitAction={() => {}}
+          submitAction={() => {
+            summarisePost();
+          }}
         />
       ) : null}
+      <Button variant="contained" onClick={summarisePost} disabled={isPending}>
+        Submit
+      </Button>
     </div>
   );
 };
