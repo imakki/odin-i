@@ -8,43 +8,13 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useMutation } from "@tanstack/react-query";
-import summariesList from "./data.json";
-import queryData from "./queryData.json";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import UserInput from "./UserInput";
-
-const summarisePost = async (text) => {
-  const response = await fetch("http://127.0.0.1:8000/summarize", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      contexts: [text],
-    }),
-  });
-  if (!response.ok) {
-    throw new Error("Network response was not ok");
-  }
-  return response.json();
-};
-
-const querySummary = async ({ context, question }) => {
-  const response = await fetch("http://127.0.0.1:8000/query", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      contexts: [context],
-      questions: [question],
-    }),
-  });
-  if (!response.ok) {
-    throw new Error("Network response was not ok");
-  }
-  return response.json();
-};
+import Home from "./pages/Home";
+import Content from "./pages/Content";
+import Query from "./pages/Query";
+import History from "./pages/History";
+import { getDocHistory, querySummary, summarisePost } from "./apis";
 
 const scrollToElementById = (elementId) => {
   // Find the element
@@ -61,6 +31,10 @@ function App() {
   const [inputText, setInputText] = useState("");
   const [isSummaryMode, setIsSummaryMode] = useState(false);
   const [questions, setQuestion] = useState([]);
+  const [history, setHistory] = useState([]);
+  const [selectedDocSummary, setSelectedDocSummary] = useState(null);
+  const [selectedDoc, setSelectedDoc] = useState(null);
+  const [sectionToHighlight, setSectionToHighlight] = useState([]);
 
   const { data, error, isPending, mutateAsync } = useMutation({
     mutationFn: summarisePost,
@@ -78,6 +52,11 @@ function App() {
       // Optional: Invalidate and refetch
       // queryClient.invalidateQueries(["users"]);
     },
+  });
+
+  const { data: historyDetails, isLoading: loadingHistory } = useQuery({
+    queryKey: ["docHistory"],
+    queryFn: getDocHistory,
   });
 
   const handleInputChange = (event) => {
@@ -118,21 +97,38 @@ function App() {
       });
     }) ?? [];
 
-  console.log("debug:highlightedSections", { data: data });
+  console.log("debug:sectionToHighlight", { data: selectedDoc });
 
   return (
     <Grid container style={{ height: "100vh", width: "100vw" }}>
-      {/* <Grid
-        item
-        xs={2}
-        style={{
-          backgroundColor: "hsla(0,0%,100%,.1)",
-          borderRight: "1px solid",
+      <History
+        text={text}
+        handleChange={handleChange}
+        handleSummarize={handleSummarize}
+        isPending={isPending}
+        historyList={historyDetails}
+        isLoading={loadingHistory}
+        setSelectedDocSummary={setSelectedDocSummary}
+        setSelectedDoc={setSelectedDoc}
+      />
+      <Content
+        summaryList={selectedDocSummary}
+        highlightedSections={sectionToHighlight}
+        isSummaryMode={isSummaryMode}
+      />
+      <Query
+        queries={selectedDoc?.queries ?? []}
+        setSectionToHighlight={(sectionNumber) => {
+          scrollToElementById(sectionNumber);
+          if (sectionToHighlight.includes(sectionNumber)) {
+            setSectionToHighlight([]);
+            return;
+          } else {
+            setSectionToHighlight([sectionNumber]);
+          }
         }}
-      >
-        History
-      </Grid> */}
-      <Grid
+      />
+      {/* <Grid
         item
         xs={7}
         style={{
@@ -214,8 +210,8 @@ function App() {
             }}
           />
         </Box>
-      </Grid>
-      <Grid
+      </Grid> */}
+      {/* <Grid
         item
         xs={5}
         style={{
@@ -273,7 +269,7 @@ function App() {
             </Box>
           </Box>
         )}
-      </Grid>
+      </Grid> */}
     </Grid>
   );
 }

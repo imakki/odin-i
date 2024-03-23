@@ -7,6 +7,9 @@ import { styled } from "@mui/material/styles";
 import FileUploadButton from "./FileUpload";
 import Modal from "./Modal";
 import { TextField } from "@mui/material";
+import { useMutation } from "@tanstack/react-query";
+import { uploadTextDoc } from "./apis";
+import { queryClient } from "./main";
 
 const CustomDivider = styled(Divider)({
   margin: "20px 0",
@@ -28,10 +31,22 @@ const DividerWithText = () => (
 
 const UserInput = ({ text, handleChange, handleSummarize, isPending }) => {
   const [open, setOpen] = useState(false);
+
+  const { mutateAsync, isLoading, error, data } = useMutation({
+    mutationFn: uploadTextDoc,
+    onSuccess: (response) => {
+      console.log(response);
+      // Optional: Invalidate and refetch
+      queryClient.invalidateQueries(["docHistory"]);
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
   return (
     <div
       style={{
-        height: "50%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "end",
@@ -56,7 +71,9 @@ const UserInput = ({ text, handleChange, handleSummarize, isPending }) => {
               <TextField
                 multiline
                 fullWidth
-                rows={10}
+                // rows={10}
+                minRows={10}
+                maxRows={100}
                 value={text}
                 onChange={handleChange}
                 variant="outlined"
@@ -66,8 +83,14 @@ const UserInput = ({ text, handleChange, handleSummarize, isPending }) => {
               />
             </div>
           }
-          cancelAction={() => {}}
-          submitAction={() => {}}
+          cancelAction={() => {
+            setOpen(false);
+          }}
+          submitAction={() => {
+            mutateAsync({
+              text: text,
+            });
+          }}
         />
       ) : null}
     </div>

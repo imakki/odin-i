@@ -2,20 +2,42 @@ import React, { useState } from "react";
 import { Box, Button, IconButton, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { Delete } from "@mui/icons-material";
+import { useMutation } from "@tanstack/react-query";
+import { uploadDocumentFile } from "./apis";
+import { queryClient } from "./main";
 
 const FileUploadButton = () => {
   const [file, setFile] = useState(null);
   const [dragOver, setDragOver] = useState(false);
 
+  const { mutateAsync, isLoading, error, data } = useMutation({
+    mutationFn: uploadDocumentFile,
+    onSuccess: (response) => {
+      console.log(response);
+      // Optional: Invalidate and refetch
+      queryClient.invalidateQueries(["docHistory"]);
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
   const handleFileChange = (event) => {
-    console.log(event.target.files);
+    console.log("debug:event", { event: event.target.files });
     // Prevent the browser from opening the file
     event.preventDefault();
+
     setDragOver(false); // Reset drag over state
 
     const files = event.target.files || event.dataTransfer.files;
+    if (!files.length) return;
+    mutateAsync({
+      file: files[0],
+    });
     setFile(files[0]); // Store the selected or dropped file in the state
   };
+
+  console.log("debug:file", { file });
 
   const handleDragOver = (event) => {
     event.preventDefault();
