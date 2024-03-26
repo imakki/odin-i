@@ -40,7 +40,8 @@ const scrollToElementById = (elementId) => {
   }
 };
 
-const App = () => {
+const App = ({ signOut, user }) => {
+  console.log("debug:user", { user });
   const theme = useTheme();
   const [queryText, setQueryText] = useState("");
   const [textfieldQuery, setTextFieldQuery] = useState("");
