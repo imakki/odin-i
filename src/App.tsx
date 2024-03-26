@@ -6,6 +6,7 @@ import {
 } from "@mui/icons-material";
 import {
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -20,40 +21,157 @@ import {
   makeStyles,
   useTheme,
 } from "@mui/material";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import Split from "react-split";
 import "./App.css";
 import FileUploadButton from "./FileUpload";
 import FileDropArea from "./components/FileDropArea";
+import { apiClient } from "./utils/apiClient";
+import ChatInterface from "./components/ChatInterface";
 
-const document_names = [
-  "Document 1",
-  "Document 1",
-  "Document 1",
-  "Document 1",
-  "Document 1",
-];
+const scrollToElementById = (elementId) => {
+  // Find the element
+  const element = document.getElementById(elementId);
 
-const PRIMARY_COLOR = "#18181b";
+  // Scroll to the element if it exists
+  if (element) {
+    element.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+};
 
 const App = () => {
   const theme = useTheme();
   const [queryText, setQueryText] = useState("");
+  const [textfieldQuery, setTextFieldQuery] = useState("");
+  const [selectedDocument, setSelectedDocument] = useState();
   const [isDocumentListDrawerOpen, setIsDocumentListDrawerOpen] =
     useState(false);
   const [isContentUploadModalOpen, setIsContentUploadModalOpen] =
     useState(false);
   const [contentText, setContentText] = useState("");
   const [file, setFile] = useState();
+  const [sectionToHighlight, setSectionToHighlight] = useState([]);
+
+  const queryClient = useQueryClient();
+
+  const {
+    data: documentsList,
+    isError: isFetchDocumentsListError,
+    isLoading: isfetchDocumentsListLoading,
+  } = useQuery({
+    queryKey: ["documentsList", {}],
+    queryFn: async () => {
+      return await apiClient.get("/documents");
+    },
+  });
+
+  const {
+    mutate: uploadDocument,
+    data: uploadedDocument,
+    isError: isUploadDocumentError,
+    isPending: isUploadDocumentPending,
+  } = useMutation({
+    mutationKey: ["uploadDocument", {}],
+    mutationFn: async () => {
+      const formData = new FormData();
+      if (contentText) {
+        formData.append("text", contentText);
+      } else {
+        formData.append("file", file[0]);
+      }
+      return await apiClient.post("/document", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    },
+    onSuccess: (data) => {
+      console.log("Document uploaded successfully", data);
+      queryClient.invalidateQueries("documentsList");
+      setIsContentUploadModalOpen(false);
+    },
+    onError: (error) => {
+      console.error("Error uploading document", error);
+    },
+  });
+
+  const {
+    mutate: createQuery,
+    data: queryData,
+    isError: isCreateQueryError,
+    isPending: isCreateQueryPending,
+  } = useMutation({
+    mutationKey: ["createQuery", {}],
+    mutationFn: async () => {
+      return await apiClient.post("/query", {
+        document_id: selectedDocument,
+        query: queryText,
+      });
+    },
+    onMutate: () => {
+      setQueryText(textfieldQuery);
+      setTextFieldQuery("");
+    },
+    onSuccess: (data) => {
+      console.log("Query created successfully", data);
+      queryClient.invalidateQueries("documentsList");
+      setQueryText("");
+    },
+    onError: (error) => {
+      console.error("Error while creating query", error);
+    },
+  });
 
   const handleUploadContent = () => {
+    console.log("inside");
+    uploadDocument();
     if (contentText) {
       // do something for content text
       return;
     }
     // do something for files
     return;
+  };
+
+  const renderDocument = () => {
+    try {
+      return documentsList?.data
+        ?.find((document) => document.id === selectedDocument)
+        ?.raw?.map((elem) => {
+          return JSON.parse(elem);
+        })
+        .flat()
+        ?.map((documentData) => {
+          return (
+            <>
+              <h4 id={documentData.section_id}>{documentData?.section_title}</h4>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: documentData?.section_content,
+                }}
+              />
+            </>
+          );
+        });
+    } catch (e) {
+      return documentsList?.data
+        ?.find((document) => document.id === selectedDocument)
+        ?.raw?.map((elem) => {
+          return elem;
+        })
+        ?.map((documentData) => {
+          return (
+            <>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: documentData,
+                }}
+              />
+            </>
+          );
+        });
+    }
   };
 
   return (
@@ -81,20 +199,25 @@ const App = () => {
               Upload new Document
             </Button>
           </Grid>
-          {document_names?.map((documentName) => {
+          {documentsList?.data?.map((document) => {
             return (
               <Grid
                 item
                 xs={12}
+                onClick={() => setSelectedDocument(document?.id)}
                 sx={{
+                  borderRadius: 1,
                   padding: "0.5rem",
                   "&:hover": {
                     backgroundColor: "#553F5C",
-                    borderRadius: 1,
+                  },
+                  ...{
+                    backgroundColor:
+                      selectedDocument === document?.id ? "#553F5C" : null,
                   },
                 }}
               >
-                <Typography color={"white"}>{documentName}</Typography>
+                <Typography color={"white"}>Document {document?.id}</Typography>
               </Grid>
             );
           })}
@@ -137,7 +260,20 @@ const App = () => {
             alignContent="space-between"
           >
             <Split className="split">
-              <div>dsds</div>
+              <div style={{ color: "black" }}>
+                <div
+                  style={{
+                    height: "calc(100% - 2rem)",
+                    padding: "1rem",
+                    marginRight: "1rem",
+                    overflow: "auto",
+                    background: "white",
+                    borderRadius: 4,
+                  }}
+                >
+                  {renderDocument()}
+                </div>
+              </div>
               <div>
                 <Grid
                   item
@@ -147,8 +283,25 @@ const App = () => {
                   style={{ height: "100%" }}
                   alignContent="space-between"
                 >
-                  <Grid item xs={12}>
-                    dsd
+                  <Grid item xs={12} style={{ height: "calc(100% - 4rem)" }}>
+                    <ChatInterface
+                      queries={
+                        documentsList?.data?.find(
+                          (document) => document.id === selectedDocument
+                        )?.queries
+                      }
+                      isCreatingQuery={isCreateQueryPending}
+                      setSectionToHighlight={(sectionNumber) => {
+                        scrollToElementById(sectionNumber);
+                        if (sectionToHighlight.includes(sectionNumber)) {
+                          setSectionToHighlight([]);
+                          return;
+                        } else {
+                          setSectionToHighlight([sectionNumber]);
+                        }
+                      }}
+                      queryText={queryText}
+                    />
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
@@ -162,6 +315,11 @@ const App = () => {
                       }}
                       multiline
                       maxRows={3}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          createQuery();
+                        }
+                      }}
                       variant="standard"
                       placeholder="Please enter your query here..."
                       size="medium"
@@ -172,6 +330,7 @@ const App = () => {
                             <IconButton
                               size="small"
                               style={{ background: "#18181b", color: "white" }}
+                              onClick={() => createQuery()}
                             >
                               <ArrowRightAltSharp />
                             </IconButton>
@@ -179,8 +338,8 @@ const App = () => {
                         ),
                       }}
                       color="error"
-                      value={queryText}
-                      onChange={(e) => setQueryText(e.target.value)}
+                      value={textfieldQuery}
+                      onChange={(e) => setTextFieldQuery(e.target.value)}
                     />
                   </Grid>
                 </Grid>
@@ -248,7 +407,7 @@ const App = () => {
                 sx={{
                   background: "white",
                   borderRadius: 4,
-                  padding: '1rem'
+                  padding: "1rem",
                 }}
                 InputProps={{
                   disableUnderline: true,
@@ -282,7 +441,7 @@ const App = () => {
             </Grid>
             <Grid item>
               <Button variant="contained" onClick={handleUploadContent}>
-                Upload
+                {isUploadDocumentPending ? <CircularProgress /> : "Upload"}
               </Button>
             </Grid>
           </Grid>
