@@ -258,7 +258,7 @@ const App = ({ signOut, user }) => {
                 }}
                 variant="contained"
               >
-                Upload new Document
+                Upload New Document
               </Button>
             </Grid>
             <Grid
