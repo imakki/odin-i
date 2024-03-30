@@ -1,5 +1,12 @@
-import { Box, Card, CardContent, Grid, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect, useRef } from "react";
+import {
+  Box,
+  Card,
+  CardContent,
+  CircularProgress,
+  Grid,
+  Typography,
+} from "@mui/material";
 
 const ChatInterface = ({
   queries,
@@ -7,8 +14,19 @@ const ChatInterface = ({
   isCreatingQuery,
   queryText,
 }) => {
+  // Ref for the container Box
+  const scrollRef = useRef(null);
+
+  // UseEffect to scroll to the bottom whenever queries change
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [queries, isCreatingQuery]);
+
   return (
     <Box
+      ref={scrollRef}
       style={{
         maxWidth: "800px",
         height: "100%",
@@ -27,9 +45,15 @@ const ChatInterface = ({
             >
               <Card
                 variant="outlined"
-                style={{ maxWidth: "80%", backgroundColor: "#18181b", color: 'white', borderRadius: '10px', padding: '1rem' }}
+                style={{
+                  maxWidth: "80%",
+                  backgroundColor: "#18181b",
+                  color: "white",
+                  borderRadius: "10px",
+                  padding: "1rem",
+                }}
               >
-                  <Typography variant="body2">{query.query}</Typography>
+                <Typography variant="body2">{query.query}</Typography>
               </Card>
             </Grid>
           </Grid>
@@ -46,15 +70,27 @@ const ChatInterface = ({
                   justifyContent: "flex-start",
                   cursor: "pointer",
                 }}
-                onClick={() => setSectionToHighlight(answer.section_number)}
+                onClick={() =>
+                  setSectionToHighlight(
+                    answer.section_number,
+                    answer.page_number
+                  )
+                }
               >
-                <Card elevation={0} style={{ maxWidth: "80%", background: 'white', color: '#18181b', borderRadius: '10px', padding: '1rem' }}>
-                    {/* <Typography color="textSecondary" gutterBottom>
+                <Card
+                  elevation={0}
+                  style={{
+                    maxWidth: "80%",
+                    background: "white",
+                    color: "#18181b",
+                    borderRadius: "10px",
+                    padding: "1rem",
+                  }}
+                >
+                  {/* <Typography color="textSecondary" gutterBottom>
                       Answer {answer.section_number}
                     </Typography> */}
-                    <Typography variant="body2">
-                      {answer.explaination_in_English_language}
-                    </Typography>
+                  <Typography variant="body2">{answer.answer}</Typography>
                 </Card>
               </Grid>
             ))}
@@ -68,14 +104,26 @@ const ChatInterface = ({
             xs={12}
             style={{ display: "flex", justifyContent: "flex-end" }}
           >
-            <Card
-              variant="outlined"
-              style={{ maxWidth: "80%", backgroundColor: "#f0f0f0" }}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
             >
-              <CardContent>
+              <CircularProgress style={{ marginRight: "1rem" }} size={30} />
+              <Card
+                variant="outlined"
+                style={{
+                  backgroundColor: "#18181b",
+                  color: "white",
+                  borderRadius: "10px",
+                  padding: "1rem",
+                }}
+              >
                 <Typography variant="body2">{queryText}</Typography>
-              </CardContent>
-            </Card>
+              </Card>
+            </div>
           </Grid>
         </Grid>
       )}

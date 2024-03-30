@@ -1,5 +1,5 @@
 export default {
-  REGION: "us-east-1",
-  USER_POOL_ID: "us-east-1_tI0aPUkaS",
-  USER_POOL_APP_CLIENT_ID: "2j0ktiaunbq9a3t7pkmmhkb09f",
+  REGION: "ap-south-1",
+  USER_POOL_ID: "ap-south-1_8Y3L4LiZU",
+  USER_POOL_APP_CLIENT_ID: "2gh350bk1thbt7j6etfuodvli2",
 };

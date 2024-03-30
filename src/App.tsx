@@ -5,6 +5,7 @@ import {
   Close,
 } from "@mui/icons-material";
 import {
+  Box,
   Button,
   CircularProgress,
   Dialog,
@@ -29,6 +30,7 @@ import FileUploadButton from "./FileUpload";
 import FileDropArea from "./components/FileDropArea";
 import { apiClient } from "./utils/apiClient";
 import ChatInterface from "./components/ChatInterface";
+import UserProfile from "./components/UserProfile";
 
 const scrollToElementById = (elementId) => {
   // Find the element
@@ -40,6 +42,36 @@ const scrollToElementById = (elementId) => {
   }
 };
 
+function CompanyBrand({ name, version }) {
+  // Use a theme hook if you have a custom theme for consistency
+  // const theme = useTheme();
+
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "6px",
+        backgroundColor: "#f5f5f5", // This color is a placeholder, replace it with your actual color code
+        borderRadius: "8px",
+        boxShadow: "0 2px 4px rgba(0,0,0,0.1)", // subtle shadow for depth
+        marginTop: "16px",
+        // Use theme.spacing for consistent spacing if using a custom MUI theme
+        // padding: theme.spacing(2),
+      }}
+    >
+      <Typography variant="h6" sx={{ fontWeight: "bold", color: "#333" }}>
+        {name}
+      </Typography>
+      <Typography variant="overline" fontSize={"10px"} sx={{ color: "#666" }}>
+        {version} Version
+      </Typography>
+    </Box>
+  );
+}
+
 const App = ({ signOut, user }) => {
   console.log("debug:user", { user });
   const theme = useTheme();
@@ -47,7 +79,7 @@ const App = ({ signOut, user }) => {
   const [textfieldQuery, setTextFieldQuery] = useState("");
   const [selectedDocument, setSelectedDocument] = useState();
   const [isDocumentListDrawerOpen, setIsDocumentListDrawerOpen] =
-    useState(false);
+    useState(true);
   const [isContentUploadModalOpen, setIsContentUploadModalOpen] =
     useState(false);
   const [contentText, setContentText] = useState("");
@@ -63,9 +95,22 @@ const App = ({ signOut, user }) => {
   } = useQuery({
     queryKey: ["documentsList", {}],
     queryFn: async () => {
-      return await apiClient.get("/documents");
+      return await apiClient.get("/document?limit=30");
     },
   });
+
+  const {
+    data: userDetail,
+    isError: isFetchUserDetailError,
+    isLoading: isFetchUserDetailLoading,
+  } = useQuery({
+    queryKey: ["userDetail", {}],
+    queryFn: async () => {
+      return await apiClient.get("/user");
+    },
+  });
+
+  console.log("debug:User email", { userDetail: userDetail?.data?.email });
 
   const {
     mutate: uploadDocument,
@@ -89,8 +134,11 @@ const App = ({ signOut, user }) => {
     },
     onSuccess: (data) => {
       console.log("Document uploaded successfully", data);
+      console.log("Document ID", data.data.id);
       queryClient.invalidateQueries("documentsList");
       setIsContentUploadModalOpen(false);
+      setSelectedDocument(data.data.id);
+      setSectionToHighlight([]);
     },
     onError: (error) => {
       console.error("Error uploading document", error);
@@ -135,45 +183,57 @@ const App = ({ signOut, user }) => {
     return;
   };
 
+  console.log("debug:documentsList", {
+    selectedDoc: documentsList?.data?.find(
+      (document) => document.id === selectedDocument
+    ),
+  });
+
   const renderDocument = () => {
-    try {
-      return documentsList?.data
-        ?.find((document) => document.id === selectedDocument)
-        ?.raw?.map((elem) => {
-          return JSON.parse(elem);
-        })
-        .flat()
-        ?.map((documentData) => {
-          return (
-            <>
-              <h4 id={documentData.section_id}>{documentData?.section_title}</h4>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: documentData?.section_content,
-                }}
-              />
-            </>
-          );
-        });
-    } catch (e) {
-      return documentsList?.data
-        ?.find((document) => document.id === selectedDocument)
-        ?.raw?.map((elem) => {
-          return elem;
-        })
-        ?.map((documentData) => {
-          return (
-            <>
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: documentData,
-                }}
-              />
-            </>
-          );
-        });
-    }
+    return documentsList?.data
+      ?.find((document) => document.id === selectedDocument)
+      ?.summary?.pages?.map((page) => (
+        <Box
+          sx={{
+            marginBottom: 2,
+            background: "white",
+            padding: 2,
+          }}
+        >
+          <Typography
+            sx={{
+              textAlign: "center",
+              marginBottom: 2,
+            }}
+          >
+            Page No: {page.page_number + 1}
+          </Typography>
+          {page.sections.map((section) => (
+            <Box
+              id={`${section.section_number}XXX${page.page_number}`}
+              key={`${section.section_number}XXX${page.page_number}`}
+              style={{
+                backgroundColor: sectionToHighlight.includes(
+                  section.section_number
+                )
+                  ? "#E6E6FA"
+                  : "white",
+                color: sectionToHighlight.includes(section.section_number)
+                  ? "black"
+                  : "black",
+              }}
+            >
+              <Box display={"flex"} marginBottom={"1rem"}>
+                {/* <Typography>{section.section_number}</Typography> */}
+                <Typography>{section.section_text}</Typography>
+              </Box>
+            </Box>
+          ))}
+        </Box>
+      ));
   };
+
+  console.log("debug:sectionToHighlight", { sectionToHighlight });
 
   return (
     <Grid container style={{ width: "100vw", height: "100vh" }}>
@@ -187,41 +247,64 @@ const App = ({ signOut, user }) => {
           alignContent="flex-start"
         >
           <Grid item xs={12}>
-            <Button
-              fullWidth
-              onClick={() => setIsContentUploadModalOpen(true)}
-              style={{
-                fontWeight: 600,
-                textTransform: "none",
-                marginBottom: 8,
-              }}
-              variant="contained"
-            >
-              Upload new Document
-            </Button>
-          </Grid>
-          {documentsList?.data?.map((document) => {
-            return (
-              <Grid
-                item
-                xs={12}
-                onClick={() => setSelectedDocument(document?.id)}
-                sx={{
-                  borderRadius: 1,
-                  padding: "0.5rem",
-                  "&:hover": {
-                    backgroundColor: "#553F5C",
-                  },
-                  ...{
-                    backgroundColor:
-                      selectedDocument === document?.id ? "#553F5C" : null,
-                  },
+            <Grid item xs={12}>
+              <Button
+                fullWidth
+                onClick={() => setIsContentUploadModalOpen(true)}
+                style={{
+                  fontWeight: 600,
+                  textTransform: "none",
+                  marginBottom: 8,
                 }}
+                variant="contained"
               >
-                <Typography color={"white"}>Document {document?.id}</Typography>
-              </Grid>
-            );
-          })}
+                Upload new Document
+              </Button>
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sx={{
+                height: "calc(100vh - 240px)",
+                overflow: "auto",
+              }}
+            >
+              {documentsList?.data?.map((document) => {
+                return (
+                  <Grid
+                    item
+                    xs={12}
+                    onClick={() => {
+                      setSelectedDocument(document?.id);
+                      setSectionToHighlight([]);
+                    }}
+                    sx={{
+                      borderRadius: 1,
+                      padding: "0.5rem",
+                      "&:hover": {
+                        backgroundColor: "#553F5C",
+                      },
+                      ...{
+                        backgroundColor:
+                          selectedDocument === document?.id ? "#553F5C" : null,
+                      },
+                    }}
+                  >
+                    <Typography color={"white"}>
+                      {document?.name.length > 27 + 3
+                        ? `${document?.name.substring(0, 27)}...`
+                        : document?.name}
+                    </Typography>
+                  </Grid>
+                );
+              })}
+            </Grid>
+            <UserProfile
+              username={userDetail?.data?.email.split("@")[0]}
+              onLogout={signOut}
+            />
+            <CompanyBrand name="Readify" version="Alpha" />
+          </Grid>
         </Grid>
       ) : null}
       <Grid
@@ -238,9 +321,9 @@ const App = ({ signOut, user }) => {
           style={{
             background: "#FFF5FF",
             height: "-webkit-fill-available",
-            margin: "1rem",
+            // margin: "1rem",
             borderRadius: 8,
-            padding: "1rem",
+            // padding: "1rem",
           }}
         >
           <Grid item>
@@ -257,18 +340,18 @@ const App = ({ signOut, user }) => {
             xs
             item
             container
-            style={{ height: "100%", width: "100%" }}
+            style={{ height: "95vh", width: "100%" }}
             alignContent="space-between"
           >
             <Split className="split">
               <div style={{ color: "black" }}>
                 <div
                   style={{
-                    height: "calc(100% - 2rem)",
+                    height: "100%",
                     padding: "1rem",
                     marginRight: "1rem",
                     overflow: "auto",
-                    background: "white",
+
                     borderRadius: 4,
                   }}
                 >
@@ -292,8 +375,8 @@ const App = ({ signOut, user }) => {
                         )?.queries
                       }
                       isCreatingQuery={isCreateQueryPending}
-                      setSectionToHighlight={(sectionNumber) => {
-                        scrollToElementById(sectionNumber);
+                      setSectionToHighlight={(sectionNumber, pageNumber) => {
+                        scrollToElementById(`${sectionNumber}XXX${pageNumber}`);
                         if (sectionToHighlight.includes(sectionNumber)) {
                           setSectionToHighlight([]);
                           return;
@@ -317,8 +400,10 @@ const App = ({ signOut, user }) => {
                       multiline
                       maxRows={3}
                       onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                          createQuery();
+                        if (e.key === "Enter" && !e.shiftKey) {
+                          // Prevent new line on Enter unless Shift is also pressed
+                          e.preventDefault(); // Prevent the default action (new line)
+                          createQuery(); // Assume this updates the query list and clears the input
                         }
                       }}
                       variant="standard"
@@ -442,7 +527,7 @@ const App = ({ signOut, user }) => {
             </Grid>
             <Grid item>
               <Button variant="contained" onClick={handleUploadContent}>
-                {isUploadDocumentPending ? <CircularProgress /> : "Upload"}
+                {isUploadDocumentPending ? "Uploading..." : "Upload"}
               </Button>
             </Grid>
           </Grid>
