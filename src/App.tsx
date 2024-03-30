@@ -139,6 +139,7 @@ const App = ({ signOut, user }) => {
       setIsContentUploadModalOpen(false);
       setSelectedDocument(data.data.id);
       setSectionToHighlight([]);
+      setContentText("");
     },
     onError: (error) => {
       console.error("Error uploading document", error);
