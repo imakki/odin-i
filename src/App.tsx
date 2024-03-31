@@ -154,7 +154,7 @@ const App = ({ signOut, user }) => {
   } = useMutation({
     mutationKey: ["createQuery", {}],
     mutationFn: async () => {
-      return await apiClient.post("/query", {
+      return await apiClient.post("/async-query", {
         document_id: selectedDocument,
         query: queryText,
       });
