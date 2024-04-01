@@ -23,7 +23,12 @@ Amplify.configure({
 
 export const queryClient = new QueryClient();
 
-const AppwithAuth = withAuthenticator(App);
+const authConfig = {
+  hideSignUp: true, // This hides the signup option
+};
+
+const AppwithAuth = withAuthenticator(App, authConfig);
+
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
