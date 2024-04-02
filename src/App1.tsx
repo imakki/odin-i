@@ -149,8 +149,6 @@ function App() {
         }}
       >
         <UserInput
-          text={text}
-          handleChange={handleChange}
           handleSummarize={handleSummarize}
           isPending={isPending}
           file={file}

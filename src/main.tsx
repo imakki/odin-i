@@ -29,13 +29,13 @@ const authConfig = {
 
 const AppwithAuth = withAuthenticator(App, authConfig);
 
-
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
+  <>
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
+        {/* @ts-ignore */}
         <AppwithAuth />
       </ThemeProvider>
     </QueryClientProvider>
-  </React.StrictMode>
+  </>
 );

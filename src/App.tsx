@@ -7,7 +7,6 @@ import {
 import {
   Box,
   Button,
-  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -124,7 +123,9 @@ const App = ({ signOut, user }) => {
       if (contentText) {
         formData.append("text", contentText);
       } else {
-        formData.append("file", file[0]);
+        if (file) {
+          formData.append("file", file?.[0]);
+        }
       }
       return await apiClient.post("/document", formData, {
         headers: {
@@ -135,6 +136,7 @@ const App = ({ signOut, user }) => {
     onSuccess: (data) => {
       console.log("Document uploaded successfully", data);
       console.log("Document ID", data.data.id);
+      // @ts-ignore
       queryClient.invalidateQueries("documentsList");
       setIsContentUploadModalOpen(false);
       setSelectedDocument(data.data.id);
@@ -165,6 +167,7 @@ const App = ({ signOut, user }) => {
     },
     onSuccess: (data) => {
       console.log("Query created successfully", data);
+      // @ts-ignore
       queryClient.invalidateQueries("documentsList");
       setQueryText("");
     },

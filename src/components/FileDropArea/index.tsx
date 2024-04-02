@@ -60,7 +60,7 @@ const FileDropArea = ({
         handleFileChange?.(acceptedFiles[0]);
       }
 
-      if (!!multiple) {
+      if (multiple) {
         const uniqueFiles = new Set(fileUploaded.map((file) => file?.name)); // Use the file name as a unique identifier
         const newFiles = acceptedFiles.filter(
           (file) => !uniqueFiles.has(file?.name)
@@ -83,6 +83,7 @@ const FileDropArea = ({
     isDragReject,
   } = useDropzone({
     onDrop,
+    // @ts-ignore
     accept: acceptFileType ? acceptFileType : "application/JSON",
     multiple: multiple,
   });
@@ -100,7 +101,7 @@ const FileDropArea = ({
   return (
     <>
       {hideDropzoneAfterUpload && fileUploaded.length > 0 ? null : (
-        <div {...getRootProps({ style })} >
+        <div {...getRootProps({ style })}>
           <input {...getInputProps()} />
           <Grid
             item
@@ -130,7 +131,7 @@ const FileDropArea = ({
       )}
       <Grid style={{ ...uploadedFileStyles }}>
         {showUploaded && fileUploaded[0] ? (
-          <Typography variant="body1" style={{marginTop: '1rem'}}>
+          <Typography variant="body1" style={{ marginTop: "1rem" }}>
             {hideDropzoneAfterUpload && fileUploaded.length > 0
               ? null
               : "Uploaded File:"}
