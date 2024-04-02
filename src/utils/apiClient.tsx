@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Define the base URL
-const BASE_URL = "http://localhost:8000";
+const BASE_URL = "https://cither.staging.chatginie.com";
 
 // Function to dynamically get the access token from local storage
 function getAccessToken() {
