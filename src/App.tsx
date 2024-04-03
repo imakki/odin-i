@@ -65,7 +65,7 @@ function CompanyBrand({ name, version }) {
         {name}
       </Typography>
       <Typography variant="overline" fontSize={"10px"} sx={{ color: "#666" }}>
-        {version} Version
+        {version} Release
       </Typography>
     </Box>
   );
@@ -127,11 +127,15 @@ const App = ({ signOut, user }) => {
           formData.append("file", file?.[0]);
         }
       }
-      return await apiClient.post("/document", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
+      return await apiClient.post(
+        "/document",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         },
-      });
+      );
     },
     onSuccess: (data) => {
       console.log("Document uploaded successfully", data);
@@ -307,7 +311,7 @@ const App = ({ signOut, user }) => {
               username={userDetail?.data?.email.split("@")[0]}
               onLogout={signOut}
             />
-            <CompanyBrand name="Readify" version="Alpha" />
+            <CompanyBrand name="chatginie" version="Alpha" />
           </Grid>
         </Grid>
       ) : null}
