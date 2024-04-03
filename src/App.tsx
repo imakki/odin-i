@@ -508,7 +508,7 @@ const App = ({ signOut, user }) => {
                 }}
                 maxRows={5}
                 rows={5}
-                placeholder="Enter text to summarise here..."
+                placeholder="Or paste the text here..."
                 onChange={(e) => setContentText(e.target.value)}
               />
             </Grid>
