@@ -163,8 +163,6 @@ const App = ({ signOut, user }) => {
       return await apiClient.post("/async-query", {
         document_id: selectedDocument,
         query: queryText,
-        page_number: sectionToHighlight[0]?.split("XXX")[1],
-        section_number: sectionToHighlight[0]?.split("XXX")[0],
       });
     },
     onMutate: () => {
@@ -224,11 +222,11 @@ const App = ({ signOut, user }) => {
               key={`${section.section_number}XXX${page.page_number}`}
               style={{
                 backgroundColor: sectionToHighlight.includes(
-                  `${section.section_number}XXX${page.page_number}`
+                  section.section_number
                 )
                   ? "#E6E6FA"
                   : "white",
-                color: sectionToHighlight.includes(`${section.section_number}XXX${page.page_number}`)
+                color: sectionToHighlight.includes(section.section_number)
                   ? "black"
                   : "black",
               }}
@@ -387,11 +385,11 @@ const App = ({ signOut, user }) => {
                       isCreatingQuery={isCreateQueryPending}
                       setSectionToHighlight={(sectionNumber, pageNumber) => {
                         scrollToElementById(`${sectionNumber}XXX${pageNumber}`);
-                        if (sectionToHighlight.includes(`${sectionNumber}XXX${pageNumber}`)) {
+                        if (sectionToHighlight.includes(sectionNumber)) {
                           setSectionToHighlight([]);
                           return;
                         } else {
-                          setSectionToHighlight([`${sectionNumber}XXX${pageNumber}`]);
+                          setSectionToHighlight([sectionNumber]);
                         }
                       }}
                       queryText={queryText}
